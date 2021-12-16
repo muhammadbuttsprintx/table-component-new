@@ -30,6 +30,18 @@
         .th {
           padding: 20px 0;
           border-bottom: 2px solid #939393;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          span {
+            // display: flex;
+            text-align: center;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            word-break: keep-all;
+            font-size: 30px;
+          }
         }
         span {
           word-break: keep-all;
