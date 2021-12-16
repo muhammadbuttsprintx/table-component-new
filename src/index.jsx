@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 import './index.scss';
-import CalenderTable from 'components/calender-table';
+import CalenderTable1 from 'components/calender-table';
+// import CalenderTable from 'components/calender-table/index';
 
 const events = [
   {
@@ -89,23 +90,31 @@ const daysLabels = {
 
 const customStyle = {
   backgroundColor: '#4B9F5B',
+  headerTextPadding: '10px',
   selectedColor: '#FFA700',
+  headerTextMargin: '10px',
+  headerTextSize: '16px',
   textColor: '#FFFFFF',
+  fixedHeader: true,
   textSize: '12px',
   margin: '10px',
   padding: '10px',
-  headerTextSize: '16px',
-  headerTextMargin: '10px',
-  headerTextPadding: '10px',
-  fixedHeader: true,
 };
 
 ReactDOM.render(
-  <CalenderTable
-    eventsData={events}
-    daysLabels={daysLabels}
-    customStyle={customStyle}
-    handleEventClick={(eventId, selected) => console.log(eventId, selected)}
-  />,
+  <>
+    {/* <CalenderTable
+      eventsData={events}
+      daysLabels={daysLabels}
+      customStyle={customStyle}
+      handleEventClick={(eventId, selected) => console.log(eventId, selected)}
+    /> */}
+    <CalenderTable1
+      eventsData={events}
+      daysLabels={daysLabels}
+      customStyle={customStyle}
+      handleEventClick={(eventId, selected) => console.log(eventId, selected)}
+    />
+  </>,
   document.getElementById('root'),
 );

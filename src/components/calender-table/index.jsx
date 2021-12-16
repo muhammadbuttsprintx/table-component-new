@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { v4 } from 'uuid';
-import style from './calender-table.module.scss';
+import style from './calender-table2.module.scss';
 import { secondRow } from '../../helper';
 
 const CalenderTable = ({
@@ -9,6 +9,7 @@ const CalenderTable = ({
   handleEventClick,
   customStyle,
 }) => {
+  const ref = useRef(null);
   let newData = [];
   eventsData.forEach(({ dayOfWeek, actionTime, name, timerPk }, index) => {
     const time = actionTime.split(':');
@@ -79,85 +80,97 @@ const CalenderTable = ({
     }
   };
 
+  useEffect(() => {
+    console.log(ref.current ? ref.current.offsetWidth : 0);
+  }, []);
+
   return (
     <>
       {rows.length >= 1 && (
         <div className={style.tableContainer}>
-          <table className={style.table} aria-label="customized table">
-            <thead>
-              <tr
-                className={style.headings}
+          <div className={style.table}>
+            <div className={style.thead} ref={ref}>
+              <div
+                className={style.tr}
                 style={{
-                  gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
+                  gridTemplateColumns: `70px 1fr 1fr 1fr 1fr 1fr 1fr 1fr`,
                 }}
               >
                 {columns.map((column, index) => (
-                  <th className={style.heading} key={v4()}>
-                    <div>
-                      <span
-                        className={style.headingTitle}
-                        style={{
-                          fontSize: customStyle.headerTextSize,
-                          margin: customStyle.headerTextMargin,
-                          padding: customStyle.headerTextPadding,
-                          width: index === 0 ? '100%' : '120px',
-                        }}
-                      >
-                        {column.name}
-                      </span>
-                    </div>
-                  </th>
+                  <div
+                    className={index === 0 ? `${style.th1}` : `${style.th}`}
+                    key={v4()}
+                  >
+                    <span
+                      className={style.headingTitle}
+                      style={{
+                        fontSize: customStyle.headerTextSize,
+                        margin: customStyle.headerTextMargin,
+                        padding: customStyle.headerTextPadding,
+                        width: index === 0 ? '95%' : '95%',
+                      }}
+                    >
+                      {column.name}
+                    </span>
+                  </div>
                 ))}
-              </tr>
-            </thead>
-            <tbody>
+              </div>
+            </div>
+            <div className={style.tbody}>
               {rows.map((row) => (
-                <tr
+                <div
+                  className={style.tr}
                   style={{
-                    gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
+                    gridTemplateColumns: `70px 1fr 1fr 1fr 1fr 1fr 1fr 1fr`,
+                    minWidth: ref.current ? ref.current.offsetWidth : 0,
                   }}
                 >
                   {columns.map((column, colIndex) =>
                     !row[column.key] ? (
-                      <td onClick={() => onClick(false)}></td>
+                      <div
+                        className={`${style.td} ${style.tdEmpty}`}
+                        onClick={() => onClick(false)}
+                      ></div>
                     ) : (
-                      <td>
-                        <div>
-                          {row[column.key]?.map((el) => (
-                            <span
-                              style={{
-                                backgroundColor:
-                                  colIndex === 0
-                                    ? 'transparent'
-                                    : el.timerPk === isActive
-                                    ? customStyle.selectedColor
-                                    : customStyle.backgroundColor,
-                                fontSize: secondRow(column, el)
-                                  ? '1px'
-                                  : customStyle.textSize,
-                                color: customStyle.textColor,
-                                visibility: secondRow(column, el)
-                                  ? 'hidden'
-                                  : 'visible',
-                                margin: customStyle.margin,
-                                padding: customStyle.padding,
-                                width: colIndex ? '120px' : '100%',
-                              }}
-                              onClick={() => {
-                                onClick(el.timerPk);
-                              }}
-                            >
-                              {el.value}
-                            </span>
-                          ))}
-                        </div>
-                      </td>
+                      <div
+                        className={
+                          colIndex ? `${style.td}` : `${style.firstTd}`
+                        }
+                      >
+                        {row[column.key]?.map((el) => (
+                          <span
+                            style={{
+                              backgroundColor:
+                                colIndex === 0
+                                  ? 'transparent'
+                                  : el.timerPk === isActive
+                                  ? customStyle.selectedColor
+                                  : customStyle.backgroundColor,
+                              fontSize: secondRow(column, el)
+                                ? '1px'
+                                : customStyle.textSize,
+                              color: customStyle.textColor,
+                              visibility: secondRow(column, el)
+                                ? 'hidden'
+                                : 'visible',
+                              margin: customStyle.margin,
+                              padding: customStyle.padding,
+                              width: !colIndex ? '95%' : '95%',
+                            }}
+                            onClick={() => {
+                              onClick(el.timerPk);
+                            }}
+                          >
+                            {el.value}
+                          </span>
+                        ))}
+                      </div>
                     ),
                   )}
-                </tr>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </div>
         </div>
       )}
     </>
