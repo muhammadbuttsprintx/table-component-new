@@ -16,6 +16,12 @@ const events = [
     name: 'title2 564444444444444444444444444444444444',
   },
   {
+    timerPk: 20,
+    dayOfWeek: 5,
+    actionTime: '15:31',
+    name: 'title2 564444444444444444444444444444444444',
+  },
+  {
     timerPk: 3,
     dayOfWeek: 1,
     actionTime: '16:00',
@@ -91,6 +97,7 @@ const customStyle = {
   headerTextSize: '16px',
   headerTextMargin: '10px',
   headerTextPadding: '10px',
+  fixedHeader: true,
 };
 
 ReactDOM.render(
@@ -98,7 +105,7 @@ ReactDOM.render(
     eventsData={events}
     daysLabels={daysLabels}
     customStyle={customStyle}
-    handleEventClick={(eventId) => console.log(eventId)}
+    handleEventClick={(eventId, selected) => console.log(eventId, selected)}
   />,
   document.getElementById('root'),
 );

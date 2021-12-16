@@ -68,13 +68,15 @@ const CalenderTable = ({
   }, [daysLabels]);
 
   const onClick = (eventId) => {
-    console.log(eventId);
+    const selected =
+      eventId === false ? -1 : isActive === eventId ? false : true;
     if (isActive === eventId) {
       setIsActive(false);
+      handleEventClick(eventId, selected);
     } else {
       setIsActive(eventId);
+      handleEventClick(eventId, selected);
     }
-    handleEventClick(eventId);
   };
 
   return (
@@ -91,17 +93,19 @@ const CalenderTable = ({
               >
                 {columns.map((column, index) => (
                   <th className={style.heading} key={v4()}>
-                    <span
-                      className={style.headingTitle}
-                      style={{
-                        fontSize: customStyle.headerTextSize,
-                        margin: customStyle.headerTextMargin,
-                        padding: customStyle.headerTextPadding,
-                        minWidth: index === 0 ? '100%' : '120px',
-                      }}
-                    >
-                      {column.name}
-                    </span>
+                    <div>
+                      <span
+                        className={style.headingTitle}
+                        style={{
+                          fontSize: customStyle.headerTextSize,
+                          margin: customStyle.headerTextMargin,
+                          padding: customStyle.headerTextPadding,
+                          width: index === 0 ? '100%' : '120px',
+                        }}
+                      >
+                        {column.name}
+                      </span>
+                    </div>
                   </th>
                 ))}
               </tr>
@@ -137,7 +141,7 @@ const CalenderTable = ({
                                   : 'visible',
                                 margin: customStyle.margin,
                                 padding: customStyle.padding,
-                                minWidth: colIndex ? '120px' : 'auto',
+                                width: colIndex ? '120px' : '100%',
                               }}
                               onClick={() => {
                                 onClick(el.timerPk);
