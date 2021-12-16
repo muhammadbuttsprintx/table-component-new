@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { v4 } from 'uuid';
-import style from './calender-table2.module.scss';
+import style from './calender-table.module.scss';
 import { secondRow } from '../../helper';
 
 const CalenderTable = ({
@@ -10,6 +10,13 @@ const CalenderTable = ({
   customStyle,
 }) => {
   const ref = useRef(null);
+  const timeStyle = {
+    fontSize: '1px',
+    color: '#102733',
+    backgroundColor: '#102733',
+    borderBottom: '2px solid #939393',
+    padding: '20px 0',
+  };
   let newData = [];
   eventsData.forEach(({ dayOfWeek, actionTime, name, timerPk }, index) => {
     const time = actionTime.split(':');
@@ -103,12 +110,16 @@ const CalenderTable = ({
                   >
                     <span
                       className={style.headingTitle}
-                      style={{
-                        fontSize: customStyle.headerTextSize,
-                        margin: customStyle.headerTextMargin,
-                        padding: customStyle.headerTextPadding,
-                        width: index === 0 ? '95%' : '95%',
-                      }}
+                      style={
+                        !index
+                          ? { ...timeStyle }
+                          : {
+                              fontSize: customStyle.headerTextSize,
+                              margin: customStyle.headerTextMargin,
+                              padding: customStyle.headerTextPadding,
+                              width: index === 0 ? '95%' : '95%',
+                            }
+                      }
                     >
                       {column.name}
                     </span>
