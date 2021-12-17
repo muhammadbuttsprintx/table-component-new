@@ -96,7 +96,11 @@ const CalenderTable = ({
       {rows.length >= 1 && (
         <div className={style.tableContainer}>
           <div className={style.table}>
-            <div className={style.thead} ref={ref}>
+            <div
+              className={style.thead}
+              ref={ref}
+              style={{ position: customStyle.fixedHeader ? 'sticky' : 'unset' }}
+            >
               <div
                 className={style.tr}
                 style={{
