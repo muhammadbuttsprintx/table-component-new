@@ -22,6 +22,7 @@ const events = [
     actionTime: '15:31',
     name: 'title2 564444444444444444444444444444444444',
   },
+
   {
     timerPk: 3,
     dayOfWeek: 1,
@@ -78,15 +79,15 @@ const events = [
   },
 ];
 
-const daysLabels = {
-  1: 'Monday',
-  2: 'Tuesday',
-  3: 'Wednesday',
-  4: 'Thursday',
-  5: 'Friday',
-  6: 'Saturday',
-  7: 'Sunday',
-};
+const daysLabels = [
+  { Day: [{ value: 'Monday' }] },
+  { Day: [{ value: 'Tuesday' }] },
+  { Day: [{ value: 'Wednesday' }] },
+  { Day: [{ value: 'Thursday' }] },
+  { Day: [{ value: 'Friday' }] },
+  { Day: [{ value: 'Saturday' }] },
+  { Day: [{ value: 'Sunday' }] },
+];
 
 const customStyle = {
   backgroundColor: '#4B9F5B',
@@ -99,22 +100,43 @@ const customStyle = {
   textSize: '12px',
   margin: '10px',
   padding: '10px',
+  widgetResponsiveTill: '500',
 };
 
 ReactDOM.render(
-  <>
-    {/* <CalenderTable
-      eventsData={events}
-      daysLabels={daysLabels}
-      customStyle={customStyle}
-      handleEventClick={(eventId, selected) => console.log(eventId, selected)}
-    /> */}
+  <div
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      overflowY: 'auto',
+      height: '100vh',
+      width: '100%',
+    }}
+  >
+    {/* <div
+      style={{
+        backgroundColor: 'grey',
+        height: '200px',
+        width: '100%',
+      }}
+    >
+      Navbar
+    </div> */}
     <CalenderTable1
       eventsData={events}
       daysLabels={daysLabels}
       customStyle={customStyle}
       handleEventClick={(eventId, selected) => console.log(eventId, selected)}
     />
-  </>,
+    <div
+      style={{
+        backgroundColor: 'grey',
+        height: '200px',
+        width: '100%',
+      }}
+    >
+      Footer
+    </div>
+  </div>,
   document.getElementById('root'),
 );

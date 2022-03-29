@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 } from 'uuid';
 import style from './calender-table.module.scss';
 import { secondRow } from '../../helper';
@@ -9,7 +9,6 @@ const CalenderTable = ({
   handleEventClick,
   customStyle,
 }) => {
-  const ref = useRef(null);
   const timeStyle = {
     fontSize: '1px',
     color: '#102733',
@@ -17,79 +16,92 @@ const CalenderTable = ({
     borderBottom: '2px solid #939393',
     padding: '20px 0',
   };
-  let newData = [];
-  eventsData.forEach(({ dayOfWeek, actionTime, name, timerPk }, index) => {
-    const time = actionTime.split(':');
-    const currentArrIndex = +time[0] * 2 + (+time[1] <= 30 ? 0 : 1);
 
-    if (newData[currentArrIndex] === undefined) {
-      newData[currentArrIndex] = {
-        0: [
-          currentArrIndex % 2
-            ? { value: `${Math.floor(currentArrIndex / 2)}:30` }
-            : { value: `${Math.floor(currentArrIndex / 2)}:00` },
-        ],
-      };
-    }
-    if (newData[currentArrIndex] !== undefined) {
-      if (!newData[currentArrIndex][`${dayOfWeek}`]) {
-        newData[currentArrIndex][`${dayOfWeek}`] = [];
-      }
-    }
-    if (newData[currentArrIndex][`${dayOfWeek}`]) {
-      newData[currentArrIndex][`${dayOfWeek}`].push({
-        value: name,
-        timerPk,
-      });
-    }
-  });
+  let data = [{ value: 'Day' }];
+  let newData = [];
+  let gridCol = '70px 1fr';
+
+  // eventsData.forEach(({ dayOfWeek, actionTime, name, timerPk }, index) => {
+  //   const time = actionTime.split(':');
+  //   const currentArrIndex = +time[0] * 2 + (+time[1] <= 30 ? 0 : 1);
+
+  //   if (newData[currentArrIndex] === undefined) {
+  //     newData[currentArrIndex] = {
+  //       0: [
+  //         currentArrIndex % 2
+  //           ? { value: `${Math.floor(currentArrIndex / 2)}:30` }
+  //           : { value: `${Math.floor(currentArrIndex / 2)}:00` },
+  //       ],
+  //     };
+  //   }
+  //   if (newData[currentArrIndex] !== undefined) {
+  //     if (!newData[currentArrIndex][`${dayOfWeek}`]) {
+  //       newData[currentArrIndex][`${dayOfWeek}`] = [];
+  //     }
+  //   }
+  //   if (newData[currentArrIndex][`${dayOfWeek}`]) {
+  //     newData[currentArrIndex][`${dayOfWeek}`].push({
+  //       value: name,
+  //       timerPk,
+  //     });
+  //   }
+  // });
+
   for (let x = 0; x <= 47; x++) {
     if (newData[x] === undefined) {
+      gridCol = gridCol + ' 1fr';
       newData[x] = {
-        0: [
-          x % 2
-            ? { value: `${Math.floor(x / 2)}:30` }
-            : { value: `${Math.floor(x / 2)}:00` },
-        ],
+        ...(x % 2
+          ? { value: `${Math.floor(x / 2)}:30` }
+          : { value: `${Math.floor(x / 2)}:00` }),
       };
     }
   }
 
-  const [rows] = useState(newData);
-  const [columns, setColumns] = useState([]);
+  const [rows, setRows] = useState([]);
+  const [columns, setColumns] = useState(newData);
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    let cols = [
-      {
-        key: '0',
-        name: 'Time',
-      },
-    ];
-    Object.entries(daysLabels).forEach(([key, value]) => {
-      cols.push({
-        key: Number(key),
-        name: value,
-      });
-    });
-    setColumns([...cols]);
+    eventsData.forEach(({ dayOfWeek, actionTime, name, timerPk }, index) => {});
+
+    setRows(daysLabels);
+
+    // let cols = [
+    //   {
+    //     key: '0',
+    //     name: 'Time',
+    //   },
+    // ];
+    // Object.entries(daysLabels).forEach(([key, value]) => {
+    //   cols.push({
+    //     key: Number(key),
+    //     name: value,
+    //   });
+    // });
+    // setRows([...cols]);
+    setColumns([...data, ...newData]);
   }, [daysLabels]);
 
   const onClick = (eventId) => {
+    const selectedEventId = eventId === false ? -1 : eventId;
     const selected =
-      eventId === false ? -1 : isActive === eventId ? false : true;
+      eventId === false ? false : isActive === eventId ? false : true;
     if (isActive === eventId) {
       setIsActive(false);
-      handleEventClick(eventId, selected);
+      handleEventClick(selectedEventId, selected);
     } else {
       setIsActive(eventId);
-      handleEventClick(eventId, selected);
+      handleEventClick(selectedEventId, selected);
     }
   };
 
-  useEffect(() => {
-    console.log(ref.current ? ref.current.offsetWidth : 0);
-  }, []);
+  const columnMinWidth = `${
+    (customStyle.widgetResponsiveTill - 80) / Object.keys(daysLabels).length
+  }px`;
+
+  // console.log(rows);
+  // console.log(columns);
 
   return (
     <>
@@ -98,19 +110,19 @@ const CalenderTable = ({
           <div className={style.table}>
             <div
               className={style.thead}
-              ref={ref}
               style={{ position: customStyle.fixedHeader ? 'sticky' : 'unset' }}
             >
               <div
                 className={style.tr}
                 style={{
-                  gridTemplateColumns: `70px 1fr 1fr 1fr 1fr 1fr 1fr 1fr`,
+                  gridTemplateColumns: gridCol,
                 }}
               >
                 {columns.map((column, index) => (
                   <div
                     className={index === 0 ? `${style.th1}` : `${style.th}`}
                     key={v4()}
+                    style={{ minWidth: columnMinWidth }}
                   >
                     <span
                       className={style.headingTitle}
@@ -125,7 +137,7 @@ const CalenderTable = ({
                             }
                       }
                     >
-                      {column.name}
+                      {column?.value}
                     </span>
                   </div>
                 ))}
@@ -136,23 +148,25 @@ const CalenderTable = ({
                 <div
                   className={style.tr}
                   style={{
-                    gridTemplateColumns: `70px 1fr 1fr 1fr 1fr 1fr 1fr 1fr`,
-                    minWidth: ref.current ? ref.current.offsetWidth : 0,
+                    gridTemplateColumns: gridCol,
                   }}
                 >
                   {columns.map((column, colIndex) =>
-                    !row[column.key] ? (
+                    !row[column.value] ? (
                       <div
                         className={`${style.td} ${style.tdEmpty}`}
                         onClick={() => onClick(false)}
+                        style={{ minWidth: columnMinWidth }}
                       ></div>
                     ) : (
                       <div
                         className={
                           colIndex ? `${style.td}` : `${style.firstTd}`
                         }
+                        style={{ minWidth: columnMinWidth }}
                       >
-                        {row[column.key]?.map((el) => (
+                        {/* {(console.log(row, column.value), 'asdasd')} */}
+                        {row[column.value]?.map((el) => (
                           <span
                             style={{
                               backgroundColor:

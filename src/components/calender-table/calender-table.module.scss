@@ -1,11 +1,12 @@
 .tableContainer {
   display: flex;
+  flex: 1;
+  height: 600px;
   background-color: #102733;
   .table {
     width: 100%;
     display: flex;
     overflow: auto;
-    height: 100vh;
     color: white;
     padding: 0 10px 0 0;
     background-color: #102733;
