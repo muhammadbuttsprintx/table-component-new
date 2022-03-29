@@ -9,9 +9,9 @@ const CalenderTable = ({
   handleEventClick,
   customStyle,
 }) => {
-  let data = [{ value: 'Day' }];
   let newData = [];
   let gridCol = '120px';
+  let data = [{ value: 'Day' }];
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState(newData);
   const [isActive, setIsActive] = useState(false);
@@ -23,8 +23,10 @@ const CalenderTable = ({
     padding: '20px 0',
   };
 
+  // prepare column array
   for (let x = 0; x <= 47; x++) {
     if (newData[x] === undefined) {
+      // preparing grid columns value
       gridCol = gridCol + ' 120px';
       newData[x] = {
         ...(x % 2
@@ -37,18 +39,25 @@ const CalenderTable = ({
   useEffect(() => {
     let rowData = [];
     rowData = [...daysLabels];
+
+    // preparing row data
     eventsData.forEach(({ dayOfWeek, actionTime, name, timerPk }) => {
+      // calculating the current index for the current event
       const time = actionTime.split(':');
       const currentArrIndex = +time[0] * 2 + (+time[1] <= 30 ? 0 : 1);
+
+      // preparing the current time for the current event
       const currentTime =
         currentArrIndex % 2
           ? `${Math.floor(currentArrIndex / 2)}:30`
           : `${Math.floor(currentArrIndex / 2)}:00`;
-      console.log(rowData);
+
+      // initializing the current time events array if undefined
       if (!rowData[dayOfWeek - 1][currentTime]) {
         rowData[dayOfWeek - 1][currentTime] = [];
       }
 
+      // inserting data in the current time events array if exists
       if (rowData[dayOfWeek - 1][currentTime]) {
         rowData[dayOfWeek - 1][currentTime].push({
           value: name,
@@ -56,6 +65,8 @@ const CalenderTable = ({
         });
       }
     });
+
+    // setting rows and columns data
     setRows(rowData);
     setColumns([...data, ...newData]);
   }, [daysLabels]);
@@ -64,10 +75,13 @@ const CalenderTable = ({
     const selectedEventId = eventId === false ? -1 : eventId;
     const selected =
       eventId === false ? false : isActive === eventId ? false : true;
+    // deselect upon clicking the same event
     if (isActive === eventId) {
       setIsActive(false);
       handleEventClick(selectedEventId, selected);
-    } else {
+    }
+    // select upon clicking the same event
+    else {
       setIsActive(eventId);
       handleEventClick(selectedEventId, selected);
     }
