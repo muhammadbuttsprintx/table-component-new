@@ -9,6 +9,12 @@ const CalenderTable = ({
   handleEventClick,
   customStyle,
 }) => {
+  let data = [{ value: 'Day' }];
+  let newData = [];
+  let gridCol = '120px';
+  const [rows, setRows] = useState([]);
+  const [columns, setColumns] = useState(newData);
+  const [isActive, setIsActive] = useState(false);
   const timeStyle = {
     fontSize: '1px',
     color: '#102733',
@@ -17,39 +23,9 @@ const CalenderTable = ({
     padding: '20px 0',
   };
 
-  let data = [{ value: 'Day' }];
-  let newData = [];
-  let gridCol = '70px 1fr';
-
-  // eventsData.forEach(({ dayOfWeek, actionTime, name, timerPk }, index) => {
-  //   const time = actionTime.split(':');
-  //   const currentArrIndex = +time[0] * 2 + (+time[1] <= 30 ? 0 : 1);
-
-  //   if (newData[currentArrIndex] === undefined) {
-  //     newData[currentArrIndex] = {
-  //       0: [
-  //         currentArrIndex % 2
-  //           ? { value: `${Math.floor(currentArrIndex / 2)}:30` }
-  //           : { value: `${Math.floor(currentArrIndex / 2)}:00` },
-  //       ],
-  //     };
-  //   }
-  //   if (newData[currentArrIndex] !== undefined) {
-  //     if (!newData[currentArrIndex][`${dayOfWeek}`]) {
-  //       newData[currentArrIndex][`${dayOfWeek}`] = [];
-  //     }
-  //   }
-  //   if (newData[currentArrIndex][`${dayOfWeek}`]) {
-  //     newData[currentArrIndex][`${dayOfWeek}`].push({
-  //       value: name,
-  //       timerPk,
-  //     });
-  //   }
-  // });
-
   for (let x = 0; x <= 47; x++) {
     if (newData[x] === undefined) {
-      gridCol = gridCol + ' 1fr';
+      gridCol = gridCol + ' 120px';
       newData[x] = {
         ...(x % 2
           ? { value: `${Math.floor(x / 2)}:30` }
@@ -58,28 +34,29 @@ const CalenderTable = ({
     }
   }
 
-  const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState(newData);
-  const [isActive, setIsActive] = useState(false);
-
   useEffect(() => {
-    eventsData.forEach(({ dayOfWeek, actionTime, name, timerPk }, index) => {});
+    let rowData = [];
+    rowData = [...daysLabels];
+    eventsData.forEach(({ dayOfWeek, actionTime, name, timerPk }) => {
+      const time = actionTime.split(':');
+      const currentArrIndex = +time[0] * 2 + (+time[1] <= 30 ? 0 : 1);
+      const currentTime =
+        currentArrIndex % 2
+          ? `${Math.floor(currentArrIndex / 2)}:30`
+          : `${Math.floor(currentArrIndex / 2)}:00`;
+      console.log(rowData);
+      if (!rowData[dayOfWeek - 1][currentTime]) {
+        rowData[dayOfWeek - 1][currentTime] = [];
+      }
 
-    setRows(daysLabels);
-
-    // let cols = [
-    //   {
-    //     key: '0',
-    //     name: 'Time',
-    //   },
-    // ];
-    // Object.entries(daysLabels).forEach(([key, value]) => {
-    //   cols.push({
-    //     key: Number(key),
-    //     name: value,
-    //   });
-    // });
-    // setRows([...cols]);
+      if (rowData[dayOfWeek - 1][currentTime]) {
+        rowData[dayOfWeek - 1][currentTime].push({
+          value: name,
+          timerPk,
+        });
+      }
+    });
+    setRows(rowData);
     setColumns([...data, ...newData]);
   }, [daysLabels]);
 
@@ -99,9 +76,6 @@ const CalenderTable = ({
   const columnMinWidth = `${
     (customStyle.widgetResponsiveTill - 80) / Object.keys(daysLabels).length
   }px`;
-
-  // console.log(rows);
-  // console.log(columns);
 
   return (
     <>
@@ -165,7 +139,6 @@ const CalenderTable = ({
                         }
                         style={{ minWidth: columnMinWidth }}
                       >
-                        {/* {(console.log(row, column.value), 'asdasd')} */}
                         {row[column.value]?.map((el) => (
                           <span
                             style={{
@@ -184,7 +157,7 @@ const CalenderTable = ({
                                 : 'visible',
                               margin: customStyle.margin,
                               padding: customStyle.padding,
-                              width: !colIndex ? '95%' : '95%',
+                              width: '95%',
                             }}
                             onClick={() => {
                               onClick(el.timerPk);
