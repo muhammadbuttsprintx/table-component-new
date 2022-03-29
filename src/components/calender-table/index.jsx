@@ -75,11 +75,13 @@ const CalenderTable = ({
     const selectedEventId = eventId === false ? -1 : eventId;
     const selected =
       eventId === false ? false : isActive === eventId ? false : true;
+
     // deselect upon clicking the same event
     if (isActive === eventId) {
       setIsActive(false);
       handleEventClick(selectedEventId, selected);
     }
+
     // select upon clicking the same event
     else {
       setIsActive(eventId);
