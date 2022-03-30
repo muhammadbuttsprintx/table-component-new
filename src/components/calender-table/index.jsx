@@ -134,7 +134,7 @@ const CalenderTable = ({
               </div>
             </div>
             <div className={style.tbody}>
-              {rows.map((row) => (
+              {rows.map((row, index) => (
                 <div
                   className={style.tr}
                   style={{
@@ -153,10 +153,22 @@ const CalenderTable = ({
                         className={
                           colIndex ? `${style.td}` : `${style.firstTd}`
                         }
-                        style={{ minWidth: columnMinWidth }}
+                        style={{
+                          ...(colIndex === 0 && column.value === 'Day'
+                            ? {
+                                position: 'sticky',
+                                left: '0px',
+                                backgroundColor: '#102733',
+                                minWidth: '85px',
+                              }
+                            : { minWidth: columnMinWidth }),
+                        }}
                       >
                         {row[column.value]?.map((el) => (
                           <span
+                            id={
+                              colIndex === 0 && column.value === 'Day' ? el : ''
+                            }
                             style={{
                               backgroundColor:
                                 colIndex === 0
@@ -179,6 +191,8 @@ const CalenderTable = ({
                               onClick(el.timerPk);
                             }}
                           >
+                            {index === 0 &&
+                              console.log(document.getElementById('Monday'))}
                             {el.value}
                           </span>
                         ))}
