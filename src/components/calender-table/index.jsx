@@ -154,7 +154,9 @@ const CalenderTable = ({
                           colIndex ? `${style.td}` : `${style.firstTd}`
                         }
                         style={{
-                          ...(colIndex === 0 && column.value === 'Day'
+                          ...(customStyle.daysStick &&
+                          colIndex === 0 &&
+                          column.value === 'Day'
                             ? {
                                 position: 'sticky',
                                 left: '0px',
