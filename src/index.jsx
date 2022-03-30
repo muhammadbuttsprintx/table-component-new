@@ -114,7 +114,7 @@ ReactDOM.render(
       width: '100%',
     }}
   >
-    {/* <div
+    <div
       style={{
         backgroundColor: 'grey',
         height: '200px',
@@ -122,7 +122,7 @@ ReactDOM.render(
       }}
     >
       Navbar
-    </div> */}
+    </div>
     <CalenderTable1
       eventsData={events}
       daysLabels={daysLabels}
