@@ -101,7 +101,7 @@ const customStyle = {
   margin: '10px',
   padding: '10px',
   widgetResponsiveTill: '500',
-  daysStick: false,
+  daysStick: true,
 };
 
 ReactDOM.render(
