@@ -14,9 +14,9 @@
     .thead {
       top: 0;
       display: flex;
-      // position: sticky;
       min-width: fit-content;
       height: fit-content;
+      z-index: 5000;
       .tr {
         display: grid;
         width: 100%;
